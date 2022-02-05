@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>CarList</title>
@@ -11,15 +11,15 @@
         <col style="background-color:LightCyan">
     </colgroup>
     <tr>
-        <th>Model</th>
-        <th>Series</th>
-        <th>Cost</th>
+        <th>Name</th>
+        <th>Last Name</th>
+        <th>Age</th>
     </tr>
 
     <tr th:each="user : ${users}">
-        <td th:text="${user.firstName}">Morgan</td>
+        <td th:text="${user.name}">Morgan</td>
         <td th:text="${user.lastName}">Freemen</td>
-        <td th:text="${user.email}">free@yandex.ru</td>
+        <td th:text="${user.age}">67</td>
     </tr>
 </table>
 </body>
