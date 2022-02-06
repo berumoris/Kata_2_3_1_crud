@@ -48,4 +48,14 @@ public class UserDaoImp implements UserDao {
         user.setId(++USERS_COUNT);
         userList.add(user);
     }
+
+    @Override
+    public void update(long id, User user) {
+        userList.set((int) id - 1, user);
+    }
+
+    @Override
+    public void delete(long id) {
+        userList.removeIf(p -> p.getId() == id);
+    }
 }

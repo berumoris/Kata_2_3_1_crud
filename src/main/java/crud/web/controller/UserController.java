@@ -20,14 +20,8 @@ public class UserController {
     }
 
     @GetMapping
-    public String index(Model model/*, @RequestParam(value = "count", required = false) Integer count*/) {
-//        List<User> userList;
-//
-//        if(count == null || count > 5 || count < 0) {
-//            userList = userService.getAllUsers();
-//        } else {
-//            userList = userService.getSeveralUsers(count);
-//        }
+    public String index(Model model) {
+
         model.addAttribute("users", userService.getAllUsers());
         return "users/index";
     }
@@ -46,6 +40,24 @@ public class UserController {
     @PostMapping()
     public String create(@ModelAttribute("user") User user) {
         userService.save(user);
+        return "redirect:/users";
+    }
+
+    @GetMapping("/{id}/edit")
+    public String edit(Model model, @PathVariable("id") long id) {
+        model.addAttribute("user", userService.show(id));
+        return "users/edit";
+    }
+
+    @PatchMapping("/{id}")
+    public String update(@ModelAttribute("user") User user, @PathVariable("id") long id) {
+        userService.update(id, user);
+        return "redirect:/users";
+    }
+
+    @DeleteMapping("/{id}")
+    public String delete(@PathVariable("id") long id) {
+        userService.delete(id);
         return "redirect:/users";
     }
 }

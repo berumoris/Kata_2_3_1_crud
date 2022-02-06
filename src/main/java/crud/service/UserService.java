@@ -9,4 +9,6 @@ public interface UserService {
     List<User> getSeveralUsers(int count);
     User show(long id);
     void save(User user);
+    void update(long id, User user);
+    void delete(long id);
 }
