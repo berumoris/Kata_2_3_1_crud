@@ -1,61 +1,38 @@
 package crud.dao;
 
-import crud.model.User;
 import org.springframework.stereotype.Repository;
-import java.util.ArrayList;
+import crud.model.User;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.util.List;
 
 @Repository
 public class UserDaoImp implements UserDao {
-    private static long USERS_COUNT;
-
-    private List<User> getFiveUsers() {
-        List<User> users = new ArrayList<>();
-        User user1 = new User(++USERS_COUNT, "Max", "Crazy", (byte) 32);
-        User user2 = new User(++USERS_COUNT,"Kira", "DeNiro", (byte) 43);
-        User user3 = new User(++USERS_COUNT,"Johny", "Dep", (byte) 56);
-        User user4 = new User(++USERS_COUNT,"Marlon", "Brando", (byte) 82);
-        User user5 = new User(++USERS_COUNT,"Mario", "Puzo", (byte)77);
-
-        users.add(user1);
-        users.add(user2);
-        users.add(user3);
-        users.add(user4);
-        users.add(user5);
-
-        return users;
-    }
-
-    List<User> userList = getFiveUsers();
+    @PersistenceContext
+    private EntityManager entityManager;
 
     @Override
     public List<User> getAllUsers() {
-        return userList;
+        return entityManager.createQuery("from User").getResultList();
     }
 
     @Override
-    public User show(long id) {
-        return userList.stream().filter(user -> user.getId() == id).findAny().orElse(null);
+    public User getUser(long id) {
+        return entityManager.find(User.class, id);
     }
 
     @Override
-    public List<User> getSeveralUsers(int count) {
-        return userList.subList(0, count);
+    public void updateUser(User user) {
+        entityManager.merge(user);
     }
 
     @Override
-    public void save(User user) {
-        user.setId(++USERS_COUNT);
-        userList.add(user);
+    public void deleteUser(long id) {
+        entityManager.createQuery("delete User where id = :id").setParameter("id", id).executeUpdate();
     }
 
     @Override
-    public void update(long id, User user) {
-        userList.set((int) id - 1, user);
-    }
-
-    @Override
-    public void delete(long id) {
-        userList.removeIf(p -> p.getId() == id);
+    public void createUser(User user) {
+        entityManager.persist(user);
     }
 }
